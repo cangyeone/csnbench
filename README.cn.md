@@ -1,21 +1,22 @@
-# Benchmark on the accuracy and efficiency of several neural network based phase pickers using datasets from China Seismic Network
 # 基于中国地震台网的震相拾取模型精度和速度对比
-[中文版说明](README.cn.md)
-更多代码和教程可以加入QQ群：173640919
-![QQ](odata/qq.png)
+[ENGLISH version](README.md)
+近年来，深度学习方法在地震研究中得到了广泛的应用。在所有的应用中，震相拾取是研究最为充分的。相对于更为复杂的神经网络，震相拾取对于初学者来说是开启地震学人工智能之旅的相对简单的工具。
 
-A tutorial on training and validating deep learning based phase pickers 
-The deep learning methods have been widely used in seismological studies in recent years. Among all the applications, picking seismic phases is the most popular one. Compared to more complicated neural networks, phase picker is relatively simple for beginners to start the artificial intelligence journey in seismology. 
-The recently released DiTing dataset provides good resources to conduct supervised deep learning investigation especially for phase picking (Zhao et al., 2022). This tutorial aims to link the raw dataset and final applicable models by introducing the data organization, model training and validating in a step by step style. Several examples using well-trained models are also provided, so that the graduate students or beginners in this field can take it as one hands-on to begin corresponding research quickly. All materials listed in this tutorial are open-source and can be publicly accessed. 
-The tutorial begins from obtaining the original DiTing dataset, all models are implemented using PyTorch framework. 
+最近发布的DiTing数据集提供了良好的资源来进行有监督的训练，特别是在震相拾取方面(Zhao等，2022)。本教程旨在通过逐步引入数据组织、模型训练和验证的方式，将原始数据集和最终适用的模型联系起来。文中还提供了几个使用训练良好的模型的例子，使该领域的研究生或初学者可以作为一个动手，迅速开始相应的研究。同时为PS波速度结构反演提供可靠的工具。本教程中列出的所有材料都是开源的，可以公开访问。
 
-### 1. Download DiTing dataset. 
-The DiTing dataset is shared online through the website of the China Earthquake Data Center [Download data](https://data.earthquake.cn), allowing users to retrieve the metadata information of the dataset online. To obtain the complete dataset, users need to register online, upgrade to an advanced user, and sign the “Data Sharing Agreements of the China Earthquake Data Center” before accessing the data. Please refer to Zhao et al. (2022) for more details. The rest instructions will assume you have obtained the DiTing dataset already. 
+本教程从获取原始的DiTing数据集开始，所有模型都是使用PyTorch框架实现的。
+
+ 
+
+### 1. 下载数据集
+DiTing数据发布自中国地震数据中心 [下载](https://data.earthquake.cn)
 
 ### 2. Prepare training and validating datasets	
-The DiTing dataset consists of 27 separate HDF5 files holding the waveforms and 27 csv files for the metadata. In order to access the entire dataset in one easier way, we merge all the HDF5 and csv files into one single HDF5 file. The meta information hold in the original csv files are set as the attributes in the single HDF5 file. Additional compression can reduce the file size to about 160 GB instead of original 283 GB, if compressed is set to True. 
-One can put the original HDF5 files and csv files into the folder path/to/diting/folder and run the following script to get the single hdf5 file holding all necessary information:
+DiTing数据集由27个独立的保存波形的HDF5文件和27个用于元数据的csv文件组成。为了以一种更简单的方式访问整个数据集，我们将所有的HDF5和csv文件合并到一个单一的HDF5文件中。原始csv文件中的元信息被设置为单个HDF5文件中的属性。如果压缩设置为True，额外的压缩可以将文件大小减少到大约160gb，而不是原来的283 GB。
 
+你可以把原始的HDF5文件和csv文件放到文件夹路径/to/diting/文件夹中，并运行以下脚本来获得包含所有必要信息的单个HDF5文件:
+
+ 
 ```bash 
 python makeh5.py -i path/to/diting/folder -o data/diting.h5 -c True
 -i the folder holding the original DiTing files. The folder contains DiTing HDF5 files and CSV metadata. 
@@ -23,8 +24,8 @@ python makeh5.py -i path/to/diting/folder -o data/diting.h5 -c True
 -c whether to compress data. The compressed data will save storage, but will be slower when training. 
 ```
 
-### 3. Data reading and processing tools 
-The single HDF5 file can be read in parallel using the tools imported from utils:
+### 3. 数据读取和处理工具
+可以使用utils导入的工具并行读取单个HDF5文件:
 
 ```python
 from utils.data import DitingData, DitingTestDataThread
@@ -33,10 +34,13 @@ train loop:
     wave, label1, label2, label3 = data_tool.batch_data(batch_size)
 ```
 
-We have designed two classes named as DitingData and DitingTestData, which are used for training and validating purpose. The optional parameters are as follows:
-The parameter stride is used to generate the LPPN labels, n_length is the length of training data. The method batch_data () is used to generate a mini-batch training data of batch_size samples. Wave is the normalized waveforms, label1 is used to train LPPN models and label2 is used to train other point-to-point models. label3 is used to train original version of EQTransformer. The format of wave is [B, C, T]. B stands for the number of waveform data B=batch_size; C, that is set to be 3 in practice, stands for the number of channels; T stands for the sampling point T=n_length. The format of label1 is [B, 2, T/stride], the classification label and regression label form two channel. The format of label2 is [B, 3, T], the 3 channels stand for probability of None, P and S. The format of label3 is [B, 3, T], the 3 channels stand for probability of P, S and detection. 
-You can load test data set by using the script:
+我们设计了两个名为DitingData和DitingTestData的类，它们用于培训和验证目的。可选参数如下:
 
+参数stride用于生成LPPN标签，n_length为训练数据的长度。方法batch_data()用于生成batch_size样本的小批量训练数据。Wave是归一化的波形，label1用于训练LPPN模型，label2用于训练其他点对点模型。label3用于训练原始版本的EQTransformer。波的格式为[B, C, T]。B为波形数据个数B=batch_size;C，实际设置为3，表示通道数;T为采样点T=n_length。label1的格式为[B, 2, T/stride]，分类标签和回归标签形成两个通道。label2的格式为[B, 3, T]， 3个通道分别代表None、P、S的概率。label3的格式为[B, 3, T]， 3个通道分别代表P、S和检测的概率。
+
+您可以使用脚本加载测试数据集:
+
+ 
 ```python
 from utils.data import DitingData, DitingTestDataThread
 data_tool = DitingTestData(file_name="data/diting.h5", stride=8, n_length=6144)
@@ -44,12 +48,14 @@ test loop:
     wave, label = data_tool.batch_data(batch_size)
 ```
 
-The wave has same preprocessing with train data. The label is arrival time (sampling point) of P, S and SNR of each sample. If there is not P or S in the data, the arrival time will be set to -1. 
+wave对训练数据进行了相同的预处理。标签为每个样本的P、S和信噪比到达时间(采样点)。如果数据中没有P或S，到达时间将设置为-1。
 
+ 
 
 ### 4. Model training
-We have implemented 7 models, UNet, UNet++, EQT, RNN and three LPPN models of Tinny Medium and Large size. These models are organized in the models/ folder. The developers can add new models easier. The original version of EQTransformer is also in the models folder. 
-You can write your own training script such as:
+我们已经实现了7个模型，UNet, unet++， EQT, RNN和Tinny中型和大型三种LPPN模型。这些模型被组织在models/文件夹中。开发人员可以更容易地添加新的模型。EQTransformer的原始版本也在模型文件夹中。
+
+你可以编写自己的培训脚本，例如:
 
 ```python
 from models.EQT import EQTransformer as Model, Loss 
@@ -67,7 +73,7 @@ loss = lossfn(pred, label)
 …
 ```
 
-Or you can easily train the 7 models by using the training script. One can run the following script to finish the model training. Moreover, the scripts can output the binary models in onnx format optionally for fast deployment. 
+或者您可以使用训练脚本轻松地训练这7个模型。可以运行以下脚本来完成模型训练。此外，脚本可以选择onnx格式输出二进制模型，以便快速部署。
 
 ```bash
 python diting.train.py -m modelname -i path/to/diting.h5 -o path/to/save/model/ --onnx true 
@@ -81,7 +87,7 @@ The optional parameters are as follows:
 -m is name of models in our article, that can be: RNN, EQT, UNet, UNet++ and LPPN(T, M, L). -o is the saved path of a model, which will output .pt and .jit format. –onnx is used to output ONNXRuntime script to get a faster infer speed. 
 
 
-### 5. Model Evaluation 
+### 5. 模型推断
 The evaluation is performed using the DiTing test dataset to measure performance and efficiency of different models. If you want to pick phase from continuous data or event records, please refer to step 6.
 Validating the model performance can be made using the valid script as:
 
