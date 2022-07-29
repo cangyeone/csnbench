@@ -13,7 +13,7 @@ class Parameter:
 
     # 文件名格式NET.STATION.LOC.CHANNEL.OTHERS.mseed
     namekeyindex = [0, 1]        # 文件名NET.KEY索引
-    channelindex = 9             # 文件名数据分量标识CHANNEL索引,全国台站是5 
+    channelindex = 3             # 文件名数据分量标识CHANNEL索引,全国台站是5 
     filenametag = "sac"        # 文件结尾标志
     chname1 = ["BHE", "BHN", "BHZ"] # 通道分量名1
     chname2 = ["E", "N", "Z"] # 通道分量名2

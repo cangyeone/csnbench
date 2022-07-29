@@ -90,7 +90,7 @@ class Process():
                 st = obspy.read(os.path.join(base_dir, fdir)
                                 ).merge(fill_value=0)
                 st.trim(pad=True, nearest_sample=True, fill_value=0)
-                st.resample(100)
+                st.resample(global_parameter.samplerate) # 调整为所需采样率
                 file_data = st[0]
                 # print("起始时间")
                 stime = datetime.datetime.strptime(
@@ -381,12 +381,12 @@ class Process():
 if __name__ == "__main__":
     # 处理输出某个时间之后的所有震相
     parser = argparse.ArgumentParser(description="拾取连续波形")
-    parser.add_argument('-i', '--input', default="F:/SOLODATA/IUSE/MD", help="输入连续波形")
+    parser.add_argument('-i', '--input', default="data/", help="输入连续波形")
     parser.add_argument(
-        '-o', '--output', default="odata/puer", help="输出文件名")
+        '-o', '--output', default="odata/picker", help="输出文件名")
     parser.add_argument(
         '-m', '--model', default="ckpt/china.rnn.jit", help="模型文件lppnmodel")
-    parser.add_argument('-d', '--device', default="cuda",
+    parser.add_argument('-d', '--device', default="cpu",
                         help="模型文件lppnmodel")
     args = parser.parse_args()
     infile = args.input
