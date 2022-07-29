@@ -4,6 +4,8 @@
 更多代码和教程可以加入QQ群：173640919
 ![QQ](odata/qq.png)
 
+[More AI tools](github.com/cangyeone/seismological-ai-tools)
+
 A tutorial on training and validating deep learning based phase pickers 
 The deep learning methods have been widely used in seismological studies in recent years. Among all the applications, picking seismic phases is the most popular one. Compared to more complicated neural networks, phase picker is relatively simple for beginners to start the artificial intelligence journey in seismology. 
 The recently released DiTing dataset provides good resources to conduct supervised deep learning investigation especially for phase picking (Zhao et al., 2022). This tutorial aims to link the raw dataset and final applicable models by introducing the data organization, model training and validating in a step by step style. Several examples using well-trained models are also provided, so that the graduate students or beginners in this field can take it as one hands-on to begin corresponding research quickly. All materials listed in this tutorial are open-source and can be publicly accessed. 
