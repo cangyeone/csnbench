@@ -101,7 +101,7 @@ def main(args):
 import argparse
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Make HDF5 file")          
-    parser.add_argument('-i', '--input', default="data/origional_DTing", type=str, help="Path to diting")       
+    parser.add_argument('-i', '--input', default="data/", type=str, help="Path to diting")       
     parser.add_argument('-o', '--output', default="data/diting.h5", type=str, help="Output name")     
     parser.add_argument('-s', '--split', default=0.9, type=float, help="Partion of training data")         
     parser.add_argument('-c', '--compression', default=True, type=bool, help="Compression")                                                       
