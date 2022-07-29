@@ -4,7 +4,7 @@
 更多代码和教程可以加入QQ群：173640919
 ![QQ](odata/qq.png)
 
-[More AI tools](github.com/cangyeone/seismological-ai-tools)
+# [More AI tools](https://github.com/cangyeone/seismological-ai-tools)
 
 A tutorial on training and validating deep learning based phase pickers 
 The deep learning methods have been widely used in seismological studies in recent years. Among all the applications, picking seismic phases is the most popular one. Compared to more complicated neural networks, phase picker is relatively simple for beginners to start the artificial intelligence journey in seismology. 
