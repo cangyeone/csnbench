@@ -14,3 +14,4 @@ utils/__pycache__/data.cpython-39.pyc
 utils/__pycache__/__init__.cpython-39.pyc
 震相拾取工具.zip
 ckpt/unet.temp.pt
+*.hdf5

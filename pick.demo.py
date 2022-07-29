@@ -21,6 +21,7 @@ class Picker(UNet):
             wave -= torch.mean(wave, dim=2, keepdim=True)
             max, maxidx = torch.max(torch.abs(wave), dim=2, keepdim=True) 
             wave /= (max + 1e-6)  
+            ### 原始forward函数
             x = wave.unsqueeze(3)
             x = self.inputs(x)
             x1 = self.layer0(x)
@@ -39,6 +40,7 @@ class Picker(UNet):
             x10 = self.layer9(x9)
             x10 = x10.softmax(dim=1)
             oc = x10.squeeze(dim=3)
+            # 计算结束
             B, C, T = oc.shape 
             tgrid = torch.arange(0, T, 1, device=device).unsqueeze(0) * self.n_stride + torch.arange(0, batchlen, 1, device=device).unsqueeze(1) * batchstride
             oc = oc.permute(0, 2, 1).reshape(-1, C) 
