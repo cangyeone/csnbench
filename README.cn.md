@@ -57,9 +57,9 @@ wave对训练数据进行了相同的预处理。标签为每个样本的P、S�
  
 
 ### 4. Model training
-我们已经实现了7个模型，UNet, unet++， EQT, RNN和Tinny中型和大型三种LPPN模型。这些模型被组织在models/文件夹中。开发人员可以更容易地添加新的模型。EQTransformer的原始版本也在模型文件夹中。
+我们已经实现了7个模型，UNet, unet++， EQT, RNN和Tinny中型和大型三种LPPN模型。这些模型被组织在models/文件夹中。开发人员可以更容易地添加新的模型。EQTransformer的Seisbench版本也在模型文件夹中，但是不推荐使用其精度较低。这里推荐使用EQT版本。
 
-你可以编写自己的培训脚本，例如:
+你可以编写自己的训练脚本，例如:
 
 ```python
 from models.EQT import EQTransformer as Model, Loss 

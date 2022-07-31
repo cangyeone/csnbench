@@ -205,7 +205,7 @@ PHASE,2022-04-09 02:28:41.929700,100.5690,25.2658,S,0.621,MD.01311,13.753,3.909,
 ```
 
 #### 7. List of models and pertrained model
-**The pretrained model is trained with GPU, you need to load as "torch.load(pt_path, map_location="cpu")"**
+**The pretrained model is trained with GPU, you need to load as "torch.load(pt_path, map_location="cpu")". All the models are kept in folder ckpt**
 We provide two sets of models for the end-users who may not care about model creation details but are interested in applying them to the seismic records. Each set contains 7 models as mentioned in current paper. The first set of models are trained with DiTing data with 50 Hz sampling rate, and the second set of modes are trained using one dataset at the similar size but with 100 Hz sampling rate. So the users can choose one of them based on the sampling rate of their records. 
 For each model, there are three model files in different formats: “.pt” model only contains trainable parameters; “.jit” model contains parameters and the computation graph, which allows the user to run without other scripts; “.onnx” model can be used in ONNXRuntime, under which a high speed is expected.
 The details of these model files are listed in Table S1:
