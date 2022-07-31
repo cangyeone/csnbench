@@ -142,9 +142,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train with diting")          
     parser.add_argument('-i', '--input', default="data/diting.h5", type=str, help="Path to h5 data")       
     parser.add_argument('-o', '--output', default="ckpt/", type=str, help="output dir")      
-    parser.add_argument('-m', '--model', default="unetpp", type=str, 
+    parser.add_argument('-m', '--model', default="rnn", type=str, 
                 choices=["rnn", "eqt", "unet", "unetpp", "lppnt", "lppnm", "lppnl", "RNN", "EQT", "UNet", "UNet++", "LPPNT", "LPPNM", "LPPNL"], help="Train model name")      
-    parser.add_argument('--onnx', default=True, type=bool, help="Whether out put onnx ckpt")       
+    parser.add_argument('--onnx', default=False, type=bool, help="Whether out put onnx ckpt")       
     parser.add_argument('--plot', default=True, type=bool, help="Whether plot training figure")                                                       
     args = parser.parse_args()      
     main(args)
