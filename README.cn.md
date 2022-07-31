@@ -16,7 +16,7 @@
 DiTing数据发布自中国地震数据中心 [下载](https://data.earthquake.cn)
 
 ### 2. Prepare training and validating datasets	
-DiTing数据集由27个独立的保存波形的HDF5文件和27个用于元数据的csv文件组成。为了以一种更简单的方式访问整个数据集，我们将所有的HDF5和csv文件合并到一个单一的HDF5文件中。原始csv文件中的元信息被设置为单个HDF5文件中的属性。如果压缩设置为True，额外的压缩可以将文件大小减少到大约160gb，而不是原来的283 GB。
+DiTing数据集由27个独立的保存波形的HDF5文件和27个用于元数据的csv文件组成。为了以一种更简单的方式访问整个数据集，我们将所有的HDF5和csv文件合并到一个单一的HDF5文件中。原始csv文件中的元信息被设置为单个HDF5文件中的属性。如果压缩设置为True，额外的压缩可以将文件大小减少到大约160GB，而不是原来的283GB。
 
 你可以把原始的HDF5文件和csv文件放到文件夹路径/to/diting/文件夹中，并运行以下脚本来获得包含所有必要信息的单个HDF5文件:
 
@@ -92,8 +92,7 @@ The optional parameters are as follows:
 
 
 ### 5. 模型推断
-The evaluation is performed using the DiTing test dataset to measure performance and efficiency of different models. If you want to pick phase from continuous data or event records, please refer to step 6.
-Validating the model performance can be made using the valid script as:
+为测试不同模型性能，这里推荐使用onnx库来进行。onnx库更精简效率更高一些。在训练过程中已经保存了onnx模型。为测试可以执行一下脚本：
 
 ```bash
 python diting.valid.py -m path/to/jit/model.jit -i path/to/h5file -o path/to/outname.txt
