@@ -280,7 +280,7 @@ class DitingDataThread():
     def kill_all(self):
         self.p1.terminate() 
         for p in self.p2s:
-            p.terminate() 
+            p.stop() 
     def feed_data(self, fqueue, epoch):
         while True:
             h5file = h5py.File(self.file_name, "r")
@@ -412,8 +412,8 @@ class DitingDataTestThread():
         return self.epoch.value 
     def kill_all(self):
         for p in self.p2s:
-            p.terminate() 
-        self.p1.terminate() 
+            p.stop() 
+        self.p1.stop() 
     def feed_data(self, fqueue, epoch):
         h5file = h5py.File(self.file_name, "r")
         train = h5file["test"]
